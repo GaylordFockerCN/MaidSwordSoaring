@@ -1,11 +1,13 @@
 package com.p1nero.maid_sword_soaring.entity.fly_sword;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import com.p1nero.maid_sword_soaring.MaidSwordSoaringMod;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
@@ -18,6 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 
@@ -30,6 +33,11 @@ public abstract class SwordEntity extends PathfinderMob {
 
     protected SwordEntity(EntityType<? extends PathfinderMob> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
+    }
+
+    @Override
+    public boolean hurt(@NotNull DamageSource pSource, float pAmount) {
+        return false;
     }
 
     public static AttributeSupplier getDefaultAttribute() {
@@ -54,10 +62,10 @@ public abstract class SwordEntity extends PathfinderMob {
     public LivingEntity getOwner() {
         try {
             UUID uuid = this.getOwnerUUID();
-            if(uuid != null){
+            if (uuid != null) {
                 Player player = this.level().getPlayerByUUID(uuid);
-                if(player == null){
-                    if(this.level() instanceof ServerLevel serverLevel){
+                if (player == null) {
+                    if (this.level() instanceof ServerLevel serverLevel) {
                         return serverLevel.getEntity(uuid) instanceof LivingEntity livingEntity ? livingEntity : null;
                     }
                 } else {
@@ -76,7 +84,7 @@ public abstract class SwordEntity extends PathfinderMob {
     }
 
     public void setItemStack(ItemStack itemStack) {
-        this.getEntityData().set(ITEM_STACK, itemStack);
+        this.getEntityData().set(ITEM_STACK, itemStack.copy());
     }
 
     public void setOwner(LivingEntity rider) {
@@ -89,8 +97,11 @@ public abstract class SwordEntity extends PathfinderMob {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void setRenderPose(PoseStack poseStack, float yRot, float partialTick){
+    public void setRenderPose(PoseStack poseStack, float yRot, float partialTick) {
         Vec3 view = this.calculateViewVector(0, yRot);
-        poseStack.mulPose(new Quaternionf().rotateTo((float) 0, 1F, -0.1F, (float) view.x, (float) view.y, (float) view.z));
+        poseStack.translate(0, 0.36, 0);
+        poseStack.mulPose(new Quaternionf().rotateTo((float) 0, 0, 1, (float) view.x, (float) view.y, (float) view.z));
+        poseStack.mulPose(Axis.XP.rotationDegrees(90f));
+        poseStack.mulPose(Axis.YP.rotationDegrees(90));
     }
 }

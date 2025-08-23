@@ -14,5 +14,6 @@ public class ClientModEvents {
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event){
         EntityRenderers.register(MaidSwordSoaringEntities.RIDEABLE_SWORD.get(), SwordEntityRenderer::new);
+        EntityRenderers.register(MaidSwordSoaringEntities.FLY_SWORD.get(), SwordEntityRenderer::new);
     }
 }

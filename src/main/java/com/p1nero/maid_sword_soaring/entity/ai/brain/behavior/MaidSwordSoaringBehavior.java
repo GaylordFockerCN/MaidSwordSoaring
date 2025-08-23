@@ -1,4 +1,4 @@
-package com.p1nero.maid_sword_soaring.entity.ai.brain.task;
+package com.p1nero.maid_sword_soaring.entity.ai.brain.behavior;
 
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
 import com.google.common.collect.ImmutableMap;
@@ -6,16 +6,12 @@ import com.p1nero.maid_sword_soaring.MaidSwordSoaringMod;
 import com.p1nero.maid_sword_soaring.entity.fly_sword.RideableSwordEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.behavior.Behavior;
-import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
-import net.minecraft.world.entity.ai.memory.MemoryModuleType;
-import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import org.jetbrains.annotations.NotNull;
 
 public class MaidSwordSoaringBehavior extends Behavior<EntityMaid> {
     public MaidSwordSoaringBehavior() {
-        super(ImmutableMap.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.REGISTERED));
+        super(ImmutableMap.of());
     }
 
     @Override
@@ -29,8 +25,8 @@ public class MaidSwordSoaringBehavior extends Behavior<EntityMaid> {
     }
 
     @Override
-    protected boolean canStillUse(@NotNull ServerLevel pLevel, @NotNull EntityMaid pEntity, long pGameTime) {
-        return checkExtraStartConditions(pLevel, pEntity) && pEntity.getVehicle() != null;
+    protected boolean canStillUse(@NotNull ServerLevel pLevel, @NotNull EntityMaid maid, long pGameTime) {
+        return checkExtraStartConditions(pLevel, maid) && (maid.getVehicle() instanceof RideableSwordEntity rideableSwordEntity && rideableSwordEntity.getFirstPassenger() == maid);
     }
 
     @Override
@@ -50,11 +46,4 @@ public class MaidSwordSoaringBehavior extends Behavior<EntityMaid> {
         }
     }
 
-    @Override
-    protected void tick(@NotNull ServerLevel pLevel, @NotNull EntityMaid maid, long pGameTime) {
-        LivingEntity owner = maid.getOwner();
-        if(owner != null) {
-            BehaviorUtils.lookAtEntity(maid, owner);
-        }
-    }
 }

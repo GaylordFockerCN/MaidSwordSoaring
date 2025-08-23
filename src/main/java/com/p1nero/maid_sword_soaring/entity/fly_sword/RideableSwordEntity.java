@@ -1,7 +1,9 @@
 package com.p1nero.maid_sword_soaring.entity.fly_sword;
 
+import com.p1nero.maid_sword_soaring.MaidSwordSoaringMod;
+import com.p1nero.maid_sword_soaring.compat.ArmourersWorkshopCompat;
 import com.p1nero.maid_sword_soaring.entity.MaidSwordSoaringEntities;
-import com.p1nero.maid_sword_soaring.entity.ai.goal.SwordFollowOwnerGoal;
+import com.p1nero.maid_sword_soaring.entity.ai.goal.SwordFollowTargetGoal;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
@@ -20,7 +22,7 @@ public class RideableSwordEntity extends SwordEntity {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new SwordFollowOwnerGoal(this));
+        this.goalSelector.addGoal(0, new SwordFollowTargetGoal(this));
     }
 
     @Override
@@ -28,4 +30,11 @@ public class RideableSwordEntity extends SwordEntity {
         return false;
     }
 
+    @Override
+    public void tick() {
+        super.tick();
+        if(this.tickCount > 60 && this.getPassengers().isEmpty()) {
+            this.discard();
+        }
+    }
 }

@@ -6,12 +6,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Mod(MaidSwordSoaringMod.MOD_ID)
@@ -38,5 +40,11 @@ public class MaidSwordSoaringMod {
             return false;
         }
         return sword.getItem() instanceof SwordItem || MaidSwordSoaringConfig.swordItems.contains(sword.getItem());
+    }
+
+    public static void runInArmourersWorkshopLoaded(Supplier<Runnable> handler) {
+        if (ModList.get().isLoaded("armourers_workshop")) {
+            handler.get().run();
+        }
     }
 }
