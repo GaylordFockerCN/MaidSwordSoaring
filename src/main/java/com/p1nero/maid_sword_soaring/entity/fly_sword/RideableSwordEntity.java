@@ -13,7 +13,9 @@ public class RideableSwordEntity extends SwordEntity {
 
     public RideableSwordEntity(LivingEntity owner) {
         this(MaidSwordSoaringEntities.RIDEABLE_SWORD.get(), owner.level());
+        this.setPos(owner.position());
         this.setOwner(owner);
+        this.setItemStack(owner.getMainHandItem());
     }
 
     @Override

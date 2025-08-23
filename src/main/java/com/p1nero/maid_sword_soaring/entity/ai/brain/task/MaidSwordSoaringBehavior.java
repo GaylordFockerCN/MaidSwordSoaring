@@ -9,11 +9,13 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import org.jetbrains.annotations.NotNull;
 
 public class MaidSwordSoaringBehavior extends Behavior<EntityMaid> {
     public MaidSwordSoaringBehavior() {
-        super(ImmutableMap.of());
+        super(ImmutableMap.of(MemoryModuleType.ATTACK_TARGET, MemoryStatus.REGISTERED));
     }
 
     @Override
@@ -43,7 +45,7 @@ public class MaidSwordSoaringBehavior extends Behavior<EntityMaid> {
     protected void stop(@NotNull ServerLevel pLevel, @NotNull EntityMaid pEntity, long pGameTime) {
         Entity vehicle = pEntity.getVehicle();
         pEntity.stopRiding();
-        if(vehicle != null) {
+        if(vehicle instanceof RideableSwordEntity) {
             vehicle.discard();
         }
     }

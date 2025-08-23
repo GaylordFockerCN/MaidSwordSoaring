@@ -12,10 +12,9 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Quaternionf;
 
 @OnlyIn(Dist.CLIENT)
-public class SwordEntityRenderer <T extends SwordEntity> extends EntityRenderer<T> {
+public class SwordEntityRenderer<T extends SwordEntity> extends EntityRenderer<T> {
     public SwordEntityRenderer(EntityRendererProvider.Context pContext) {
         super(pContext);
     }
@@ -23,9 +22,9 @@ public class SwordEntityRenderer <T extends SwordEntity> extends EntityRenderer<
     @Override
     public void render(@NotNull T swordEntity, float pEntityYaw, float pPartialTick, @NotNull PoseStack poseStack, @NotNull MultiBufferSource pBuffer, int pPackedLight) {
         poseStack.pushPose();
-//        poseStack.mulPose(new Quaternionf().rotateTo());
+        swordEntity.setRenderPose(poseStack, pEntityYaw, pPartialTick);
         BakedModel model = Minecraft.getInstance().getItemRenderer().getItemModelShaper().getItemModel(swordEntity.getItemStack());
-        Minecraft.getInstance().getItemRenderer().render(swordEntity.getItemStack(), ItemDisplayContext.THIRD_PERSON_RIGHT_HAND,false,poseStack,pBuffer, pPackedLight,1, model);
+        Minecraft.getInstance().getItemRenderer().render(swordEntity.getItemStack(), ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, false, poseStack, pBuffer, pPackedLight, 1, model);
         poseStack.popPose();
     }
 

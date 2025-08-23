@@ -32,24 +32,36 @@ public class SwordFollowOwnerGoal extends Goal {
                 double distanceToTarget = swordPos.distanceTo(targetPos);
 
                 double teleportThreshold = 50.0;
-                double baseSpeed = 0.5;
+                double baseSpeed = 0.1;
 
                 if (distanceToTarget > teleportThreshold) {
                     sword.teleportTo(targetPos.x, targetPos.y + 1, targetPos.z);
                     return;
                 }
 
-                Vec3 direction = targetPos.subtract(swordPos).add(0, 1, 0).normalize();
+                if(distanceToTarget < 3) {
+                    return;
+                }
 
+                Vec3 direction = targetPos.subtract(swordPos).add(0, 1, 0).normalize();
+                float yRot = getYRotOfVector(direction);
                 double speedMultiplier = Math.min(1.0 + (distanceToTarget / 5.0), 3.0);
                 double speed = baseSpeed * speedMultiplier;
 
                 Vec3 motion = direction.scale(speed);
                 sword.setDeltaMovement(motion);
-                sword.getLookControl().setLookAt(target);
-                System.out.println("ddd");
+                sword.setYRot(yRot);
+                sword.setYHeadRot(yRot);
+                sword.setYBodyRot(yRot);
+                maid.setYRot(yRot);
+                maid.setYBodyRot(yRot);
             }
 
         }
+    }
+
+    public static float getYRotOfVector(Vec3 vec) {
+        Vec3 normalized = vec.normalize();
+        return (float) (org.joml.Math.atan2(normalized.z, normalized.x) * (180D / Math.PI) - (double)90.0F);
     }
 }

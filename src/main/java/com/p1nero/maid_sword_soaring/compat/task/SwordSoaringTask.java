@@ -1,5 +1,6 @@
 package com.p1nero.maid_sword_soaring.compat.task;
 
+import com.google.common.collect.Lists;
 import com.p1nero.maid_sword_soaring.MaidSwordSoaringMod;
 import com.github.tartaricacid.touhoulittlemaid.api.task.IMaidTask;
 import com.github.tartaricacid.touhoulittlemaid.entity.passive.EntityMaid;
@@ -51,6 +52,6 @@ public class SwordSoaringTask implements IMaidTask {
     @Override
     public @NotNull List<Pair<Integer, BehaviorControl<? super EntityMaid>>> createBrainTasks(@NotNull EntityMaid maid) {
         Pair<Integer, BehaviorControl<? super EntityMaid>> swordSoaringTask = Pair.of(5, new MaidSwordSoaringBehavior());
-        return List.of(swordSoaringTask);
+        return Lists.newArrayList(swordSoaringTask);
     }
 }
