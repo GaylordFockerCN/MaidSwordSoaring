@@ -2,10 +2,10 @@ package com.p1nero.maid_sword_soaring.entity.fly_sword;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.p1nero.maid_sword_soaring.MaidSwordSoaringMod;
-import com.p1nero.maid_sword_soaring.compat.ArmourersWorkshopCompat;
 import com.p1nero.maid_sword_soaring.entity.MaidSwordSoaringEntities;
 import com.p1nero.maid_sword_soaring.utils.MathUtils;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,6 +22,10 @@ public class FlySwordEntity extends SwordEntity {
     private Entity target;
     private int delay;
     private float speed = 0.3F;
+    private int lifeTime = 100;
+    private float damageRate = 0.5F;
+    private float fixedYRot = 0;
+    private Vec3 fixedDir = Vec3.ZERO;
     @Override
     public boolean isCurrentlyGlowing() {
         return true;
@@ -34,10 +38,30 @@ public class FlySwordEntity extends SwordEntity {
     public FlySwordEntity(LivingEntity owner, Entity target) {
         this(MaidSwordSoaringEntities.FLY_SWORD.get(), owner.level());
         this.setOwner(owner);
-        this.setPos(owner.getEyePosition().add(0, 1, 0));
+        this.setPos(owner.getEyePosition().add(this.getRandom().nextFloat() * 2 - 1, 1, this.getRandom().nextFloat() * 2 - 1));
         this.setItemStack(owner.getMainHandItem());
         this.target = target;
         syncDirection();
+    }
+
+    @Override
+    public void setYRot(float pYRot) {
+        super.setYRot(pYRot);
+        this.fixedYRot = pYRot;
+    }
+
+    @Override
+    public void setDeltaMovement(@NotNull Vec3 pDeltaMovement) {
+        super.setDeltaMovement(pDeltaMovement);
+        this.fixedDir = pDeltaMovement;
+    }
+
+    public void setFixedDir(Vec3 fixedDir) {
+        this.fixedDir = fixedDir;
+    }
+
+    public void setFixedYRot(float fixedYRot) {
+        this.fixedYRot = fixedYRot;
     }
 
     public void setDelay(int delay) {
@@ -49,20 +73,28 @@ public class FlySwordEntity extends SwordEntity {
         this.speed = speed;
     }
 
+    public void setLifeTime(int lifeTime) {
+        this.lifeTime = lifeTime;
+    }
+
+    public void setDamageRate(float damageRate) {
+        this.damageRate = damageRate;
+    }
+
     @Override
     public void tick() {
         super.tick();
         if(delay > 0) {
             delay--;
-        }
-        if(tickCount > 100 || this.onGround()) {
-            this.discard();
-        }
-        if(!level().isClientSide) {
-            if(this.target != null) {
-                syncDirection();
+            if(delay == 0) {
+                this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.BLOCKS, 1.0F, 1.0F);
             }
         }
+        if(tickCount > lifeTime || this.onGround()) {
+            this.discard();
+        }
+
+        syncDirection();
     }
 
     @Override
@@ -74,12 +106,17 @@ public class FlySwordEntity extends SwordEntity {
         if(target instanceof LivingEntity livingEntity && !this.getOwner().canAttack(livingEntity)) {
             return;
         }
-        target.hurt(this.damageSources().mobAttack(this.getOwner()), (float) this.getOwner().getAttributeValue(Attributes.ATTACK_DAMAGE) * 0.5f);
+        target.hurt(this.damageSources().mobAttack(this.getOwner()), (float) this.getOwner().getAttributeValue(Attributes.ATTACK_DAMAGE) * damageRate);
         this.discard();
     }
 
     public void syncDirection() {
         if(level().isClientSide) {
+            return;
+        }
+        if(this.target == null) {
+            this.setYRot(fixedYRot);
+            this.setFixedDir(fixedDir);
             return;
         }
         Vec3 dir = this.target.getEyePosition().subtract(this.position()).normalize();

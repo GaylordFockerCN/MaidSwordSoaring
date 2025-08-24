@@ -27,9 +27,9 @@ public class SwordSoaringTask implements IAttackTask {
 
     private static final int MAX_STOP_ATTACK_DISTANCE = 8;
 
-    private static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(MaidSwordSoaringMod.MOD_ID, "sword_soaring");
+    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(MaidSwordSoaringMod.MOD_ID, "sword_soaring");
 
-    private static final ItemStack ICON = Items.IRON_SWORD.getDefaultInstance();
+    public static final ItemStack ICON = Items.IRON_SWORD.getDefaultInstance();
 
     @Override
     public @NotNull ResourceLocation getUid() {

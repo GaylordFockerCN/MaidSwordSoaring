@@ -18,6 +18,16 @@ public class MaidShootFlySwordBehavior {
                 flySwordEntity.setSpeed(0.7F);
                 serverLevel.addFreshEntity(flySwordEntity);
                 flySwordEntity.setDeltaMovement(maid.getViewVector(1.0F));
+                FlySwordEntity flySwordEntity2 = new FlySwordEntity(maid, target);
+                flySwordEntity2.setDelay(20);
+                flySwordEntity2.setSpeed(0.7F);
+                serverLevel.addFreshEntity(flySwordEntity2);
+                flySwordEntity2.setDeltaMovement(maid.getViewVector(1.0F));
+                FlySwordEntity flySwordEntity3 = new FlySwordEntity(maid, target);
+                flySwordEntity3.setDelay(25);
+                flySwordEntity3.setSpeed(0.7F);
+                serverLevel.addFreshEntity(flySwordEntity3);
+                flySwordEntity3.setDeltaMovement(maid.getViewVector(1.0F));
                 cooldownAccessor.setWithExpiry(true, pCooldownBetweenAttacks);
                 return true;
             } else {
