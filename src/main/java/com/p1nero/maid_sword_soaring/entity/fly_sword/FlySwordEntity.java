@@ -2,6 +2,7 @@ package com.p1nero.maid_sword_soaring.entity.fly_sword;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import com.p1nero.maid_sword_soaring.client.MaidSwordSoaringSounds;
 import com.p1nero.maid_sword_soaring.entity.MaidSwordSoaringEntities;
 import com.p1nero.maid_sword_soaring.utils.MathUtils;
 import net.minecraft.sounds.SoundEvents;
@@ -87,7 +88,7 @@ public class FlySwordEntity extends SwordEntity {
         if(delay > 0) {
             delay--;
             if(delay == 0) {
-                this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ARROW_SHOOT, SoundSource.BLOCKS, 1.0F, 1.0F);
+                this.level().playSound(null, this.getX(), this.getY(), this.getZ(), MaidSwordSoaringSounds.SHOOT.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
             }
         }
         if(tickCount > lifeTime || this.onGround()) {
@@ -106,6 +107,7 @@ public class FlySwordEntity extends SwordEntity {
         if(target instanceof LivingEntity livingEntity && !this.getOwner().canAttack(livingEntity)) {
             return;
         }
+        this.level().playSound(null, this.getX(), this.getY(), this.getZ(), MaidSwordSoaringSounds.HIT.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
         target.hurt(this.damageSources().mobAttack(this.getOwner()), (float) this.getOwner().getAttributeValue(Attributes.ATTACK_DAMAGE) * damageRate);
         this.discard();
     }

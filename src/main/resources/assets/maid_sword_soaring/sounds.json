@@ -1,0 +1,14 @@
+{
+  "hit": {
+    "subtitle": "sounds.maid_sword_soaring.hit",
+    "sounds": [
+      "maid_sword_soaring:hit"
+    ]
+  },
+  "shoot": {
+    "subtitle": "sounds.maid_sword_soaring.shoot",
+    "sounds": [
+      "maid_sword_soaring:shoot"
+    ]
+  }
+}

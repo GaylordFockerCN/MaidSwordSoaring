@@ -1,6 +1,7 @@
 package com.p1nero.maid_sword_soaring;
 
 import com.mojang.logging.LogUtils;
+import com.p1nero.maid_sword_soaring.client.MaidSwordSoaringSounds;
 import com.p1nero.maid_sword_soaring.entity.MaidSwordSoaringEntities;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -22,8 +23,9 @@ public class MaidSwordSoaringMod {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public MaidSwordSoaringMod(FMLJavaModLoadingContext context) {
-        IEventBus modEventBus = context.getModEventBus();
-        MaidSwordSoaringEntities.ENTITIES.register(modEventBus);
+        IEventBus bus = context.getModEventBus();
+        MaidSwordSoaringEntities.ENTITIES.register(bus);
+        MaidSwordSoaringSounds.SOUND_EVENTS.register(bus);
         context.registerConfig(ModConfig.Type.COMMON, MaidSwordSoaringConfig.SPEC);
     }
 

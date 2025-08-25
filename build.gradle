@@ -3,6 +3,7 @@ plugins {
     id 'idea'
     id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    id 'org.spongepowered.mixin' version '0.7.+'
 }
 
 group = mod_group_id
@@ -24,6 +25,7 @@ minecraft {
                     "-XX:+AllowEnhancedClassRedefinition"
             ]
             workingDirectory project.file('run')
+            arg "-mixin.config=" + "${mod_id}" + ".mixins.json"
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
             property 'mixin.env.remapRefMap', 'true'
@@ -53,6 +55,11 @@ minecraft {
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
+mixin {
+    add sourceSets.main, "${mod_id}" + '.mixin-refmap.json'
+    config "${mod_id}" + '.mixins.json'
+}
+
 repositories {
     maven {
         url "https://cursemaven.com"
@@ -64,9 +71,8 @@ repositories {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-    // 目前只有 CurseForge Maven 能够支持同时下载模组和源码，方便开发
-    // Current Only CurseForge Maven can support downloading both mod and source code, which is convenient for development
-    implementation fg.deobf('curse.maven:touhou-little-maid-355044:6613821-sources-6613853')
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    implementation fg.deobf("curse.maven:touhou-little-maid-355044:6911704-sources-6911737")
     implementation fg.deobf("curse.maven:armourers-workshop-229523:6701559")
 }
 
@@ -94,7 +100,8 @@ jar {
     manifest {
         attributes([
                 "Implementation-Title"  : project.name,
-                "Implementation-Version": "${version}"
+                "Implementation-Version": "${version}",
+                "MixinConfigs"            : "${mod_id}" + ".mixins.json"
         ])
     }
     finalizedBy 'reobfJar'
