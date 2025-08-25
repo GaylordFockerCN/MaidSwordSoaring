@@ -25,7 +25,7 @@ import java.util.function.Predicate;
 
 public class SwordSoaringTask implements IAttackTask {
 
-    private static final int MAX_STOP_ATTACK_DISTANCE = 8;
+    private static final int MAX_STOP_ATTACK_DISTANCE = 16;
 
     public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(MaidSwordSoaringMod.MOD_ID, "sword_soaring");
 

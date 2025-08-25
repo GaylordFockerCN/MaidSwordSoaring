@@ -3,15 +3,15 @@ package com.p1nero.maid_sword_soaring;
 import com.mojang.logging.LogUtils;
 import com.p1nero.maid_sword_soaring.client.MaidSwordSoaringSounds;
 import com.p1nero.maid_sword_soaring.entity.MaidSwordSoaringEntities;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import org.slf4j.Logger;
 
 import java.util.function.Supplier;
@@ -22,20 +22,19 @@ public class MaidSwordSoaringMod {
     public static final String MOD_ID = "maid_sword_soaring";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public MaidSwordSoaringMod(FMLJavaModLoadingContext context) {
-        IEventBus bus = context.getModEventBus();
+    public MaidSwordSoaringMod(IEventBus bus,  ModContainer modContainer) {
         MaidSwordSoaringEntities.ENTITIES.register(bus);
         MaidSwordSoaringSounds.SOUND_EVENTS.register(bus);
-        context.registerConfig(ModConfig.Type.COMMON, MaidSwordSoaringConfig.SPEC);
+        modContainer.registerConfig(ModConfig.Type.COMMON, MaidSwordSoaringConfig.SPEC);
     }
 
     public static boolean isValidSword(ItemStack sword){
         if(MaidSwordSoaringConfig.swordItems.isEmpty()){
             MaidSwordSoaringConfig.swordItems = MaidSwordSoaringConfig.ITEMS_SWORD.get().stream()
-                    .map(itemName -> ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(itemName)))
+                    .map(itemName -> BuiltInRegistries.ITEM.get(ResourceLocation.parse(itemName)))
                     .collect(Collectors.toSet());
             MaidSwordSoaringConfig.notSwordItems = MaidSwordSoaringConfig.ITEMS_NO_SWORD.get().stream()
-                    .map(itemName -> ForgeRegistries.ITEMS.getValue(ResourceLocation.parse(itemName)))
+                    .map(itemName -> BuiltInRegistries.ITEM.get(ResourceLocation.parse(itemName)))
                     .collect(Collectors.toSet());
         }
         if (MaidSwordSoaringConfig.notSwordItems.contains(sword.getItem())) {

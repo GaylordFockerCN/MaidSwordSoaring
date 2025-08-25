@@ -18,8 +18,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
@@ -48,10 +48,10 @@ public abstract class SwordEntity extends PathfinderMob {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.getEntityData().define(RIDER_UUID, Optional.empty());
-        this.getEntityData().define(ITEM_STACK, ItemStack.EMPTY);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(RIDER_UUID, Optional.empty());
+        builder.define(ITEM_STACK, ItemStack.EMPTY);
     }
 
     public @Nullable UUID getOwnerUUID() {
@@ -97,11 +97,5 @@ public abstract class SwordEntity extends PathfinderMob {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void setRenderPose(PoseStack poseStack, float yRot, float partialTick) {
-        Vec3 view = this.calculateViewVector(0, yRot);
-        poseStack.translate(0, 0.36, 0);
-        poseStack.mulPose(new Quaternionf().rotateTo((float) 0, 0, 1, (float) view.x, (float) view.y, (float) view.z));
-        poseStack.mulPose(Axis.XP.rotationDegrees(90f));
-        poseStack.mulPose(Axis.YP.rotationDegrees(90));
-    }
+    public abstract void setRenderPose(PoseStack poseStack, float yRot, float partialTick);
 }

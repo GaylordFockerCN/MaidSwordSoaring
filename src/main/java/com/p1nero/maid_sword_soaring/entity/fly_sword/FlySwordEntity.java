@@ -5,7 +5,6 @@ import com.mojang.math.Axis;
 import com.p1nero.maid_sword_soaring.client.MaidSwordSoaringSounds;
 import com.p1nero.maid_sword_soaring.entity.MaidSwordSoaringEntities;
 import com.p1nero.maid_sword_soaring.utils.MathUtils;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -14,8 +13,8 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 
@@ -24,7 +23,7 @@ public class FlySwordEntity extends SwordEntity {
     private int delay;
     private float speed = 0.3F;
     private int lifeTime = 100;
-    private float damageRate = 0.5F;
+    private float damageRate = 1.0F;
     private float fixedYRot = 0;
     private Vec3 fixedDir = Vec3.ZERO;
     @Override
@@ -108,7 +107,10 @@ public class FlySwordEntity extends SwordEntity {
             return;
         }
         this.level().playSound(null, this.getX(), this.getY(), this.getZ(), MaidSwordSoaringSounds.HIT.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+        int prevInvulnerableTime = target.invulnerableTime;
+        target.invulnerableTime = 0;
         target.hurt(this.damageSources().mobAttack(this.getOwner()), (float) this.getOwner().getAttributeValue(Attributes.ATTACK_DAMAGE) * damageRate);
+        target.invulnerableTime = prevInvulnerableTime;
         this.discard();
     }
 
