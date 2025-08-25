@@ -97,11 +97,5 @@ public abstract class SwordEntity extends PathfinderMob {
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void setRenderPose(PoseStack poseStack, float yRot, float partialTick) {
-        Vec3 view = this.calculateViewVector(0, yRot);
-        poseStack.translate(0, 0.36, 0);
-        poseStack.mulPose(new Quaternionf().rotateTo((float) 0, 0, 1, (float) view.x, (float) view.y, (float) view.z));
-        poseStack.mulPose(Axis.XP.rotationDegrees(90f));
-        poseStack.mulPose(Axis.YP.rotationDegrees(90));
-    }
+    public abstract void setRenderPose(PoseStack poseStack, float yRot, float partialTick);
 }

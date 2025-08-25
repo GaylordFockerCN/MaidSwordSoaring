@@ -15,6 +15,7 @@ public class MaidSwordSoaringConfig
 {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
+    public static final ForgeConfigSpec.BooleanValue SWORD_GLOWING;
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ITEMS_SWORD;
     public static final ForgeConfigSpec.ConfigValue<List<? extends String>> ITEMS_NO_SWORD;
 
@@ -27,7 +28,9 @@ public class MaidSwordSoaringConfig
         ITEMS_NO_SWORD = BUILDER
                 .comment("A list of items NOT considered as sword.")
                 .defineListAllowEmpty("items_not_sword", List.of("minecraft:iron_ingot"), MaidSwordSoaringConfig::validateItemName);
-
+        SWORD_GLOWING = BUILDER
+                .comment("Should sword glowing")
+                .define("sword_glowing", false);
         SPEC = BUILDER.build();
     }
 
