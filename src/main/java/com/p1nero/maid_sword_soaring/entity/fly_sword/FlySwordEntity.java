@@ -2,6 +2,7 @@ package com.p1nero.maid_sword_soaring.entity.fly_sword;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import com.p1nero.maid_sword_soaring.MaidSwordSoaringConfig;
 import com.p1nero.maid_sword_soaring.client.MaidSwordSoaringSounds;
 import com.p1nero.maid_sword_soaring.entity.MaidSwordSoaringEntities;
 import com.p1nero.maid_sword_soaring.utils.MathUtils;
@@ -28,7 +29,7 @@ public class FlySwordEntity extends SwordEntity {
     private Vec3 fixedDir = Vec3.ZERO;
     @Override
     public boolean isCurrentlyGlowing() {
-        return true;
+        return MaidSwordSoaringConfig.SWORD_GLOWING.get();
     }
 
     public FlySwordEntity(EntityType<? extends PathfinderMob> pEntityType, Level pLevel) {
