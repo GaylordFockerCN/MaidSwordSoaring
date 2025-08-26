@@ -9,6 +9,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -17,10 +19,21 @@ import net.minecraftforge.fml.common.Mod;
 public class ForgeEvents {
 
     @SubscribeEvent
+    public static void onLivingHurt(LivingAttackEvent event) {
+        if(event.getEntity() instanceof EntityMaid maid) {
+            if(maid.getTask().getUid() == SwordSoaringTask.UID && MaidSwordSoaringMod.isValidSword(maid.getMainHandItem()) && !maid.level().isClientSide) {
+                if(event.getSource().is(DamageTypeTags.IS_FALL)) {
+                    event.setCanceled(true);
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
     public static void onLivingHurt(LivingHurtEvent event) {
         //受伤发六脉神剑
         if(event.getEntity() instanceof EntityMaid maid) {
-            if(maid.getTask().getUid() == SwordSoaringTask.UID && !maid.level().isClientSide){
+            if(maid.getTask().getUid() == SwordSoaringTask.UID && MaidSwordSoaringMod.isValidSword(maid.getMainHandItem()) && !maid.level().isClientSide){
                 for (int i = 0; i < 6; i++) {
                     FlySwordEntity flySwordEntity = new FlySwordEntity(maid, null);
                     flySwordEntity.setPos(maid.getX(), maid.getY() + maid.getEyeHeight(), maid.getZ());
@@ -35,10 +48,7 @@ public class ForgeEvents {
                     flySwordEntity.setSpeed(speed);
                     maid.level().addFreshEntity(flySwordEntity);
                 }
-                if(event.getSource().is(DamageTypeTags.IS_FALL)) {
-                    event.setAmount(0);
-                    event.setCanceled(true);
-                } else {
+                if(!event.getSource().is(DamageTypeTags.IS_FALL)){
                     event.setAmount(event.getAmount() * 0.5F);
                 }
                 maid.level().playSound(null, maid.getX(), maid.getY(), maid.getZ(), SoundEvents.TOTEM_USE, SoundSource.BLOCKS, 1.0F, 1.0F);

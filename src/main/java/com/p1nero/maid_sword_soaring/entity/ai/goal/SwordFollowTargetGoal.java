@@ -41,7 +41,7 @@ public class SwordFollowTargetGoal extends Goal {
                     return;
                 }
 
-                Vec3 direction = targetPos.subtract(swordPos).add(0, 1, 0).normalize();
+                Vec3 direction = targetPos.subtract(swordPos).add(0, 1.5, 0).normalize();
                 float yRot = (float) MathUtils.getYRotOfVector(direction);
 
                 double speedMultiplier = Math.min(1.0 + (distanceToTarget / 5.0), 3.0);

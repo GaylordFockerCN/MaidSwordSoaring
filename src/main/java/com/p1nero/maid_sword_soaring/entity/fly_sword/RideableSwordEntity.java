@@ -47,7 +47,7 @@ public class RideableSwordEntity extends SwordEntity {
     @OnlyIn(Dist.CLIENT)
     public void setRenderPose(PoseStack poseStack, float yRot, float partialTick) {
         Vec3 view = this.calculateViewVector(0, yRot);
-        poseStack.translate(0, 0.36, 0);
+        poseStack.translate(0, 0.30, 0);
         poseStack.mulPose(new Quaternionf().rotateTo((float) 0, 0, 1, (float) view.x, (float) view.y, (float) view.z));
         poseStack.mulPose(Axis.XP.rotationDegrees(90f));
         poseStack.mulPose(Axis.YP.rotationDegrees(90));
