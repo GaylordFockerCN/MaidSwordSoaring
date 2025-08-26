@@ -20,7 +20,7 @@ public class ForgeEvents {
     @SubscribeEvent
     public static void onLivingHurt(LivingIncomingDamageEvent event) {
         if(event.getEntity() instanceof EntityMaid maid) {
-            if(maid.getTask().getUid() == SwordSoaringTask.UID && maid.getTask().isEnable(maid) && !maid.level().isClientSide) {
+            if(maid.getTask().getUid() == SwordSoaringTask.UID && MaidSwordSoaringMod.isValidSword(maid.getMainHandItem()) && !maid.level().isClientSide) {
                 if(event.getSource().is(DamageTypeTags.IS_FALL)) {
                     event.setCanceled(true);
                 } else {
@@ -33,7 +33,7 @@ public class ForgeEvents {
     public static void onLivingHurt(LivingDamageEvent.Pre event) {
         //受伤发六脉神剑
         if(event.getEntity() instanceof EntityMaid maid) {
-            if(maid.getTask().getUid() == SwordSoaringTask.UID && maid.getTask().isEnable(maid) && !maid.level().isClientSide){
+            if(maid.getTask().getUid() == SwordSoaringTask.UID && MaidSwordSoaringMod.isValidSword(maid.getMainHandItem()) && !maid.level().isClientSide){
                 for (int i = 0; i < 6; i++) {
                     FlySwordEntity flySwordEntity = new FlySwordEntity(maid, null);
                     flySwordEntity.setPos(maid.getX(), maid.getY() + maid.getEyeHeight(), maid.getZ());

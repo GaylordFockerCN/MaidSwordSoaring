@@ -67,11 +67,6 @@ public class SwordSoaringTask implements IAttackTask {
     }
 
     @Override
-    public boolean isEnable(@NotNull EntityMaid maid) {
-        return hasAssaultWeapon(maid);
-    }
-
-    @Override
     public boolean canAttack(@NotNull EntityMaid maid, @NotNull LivingEntity target) {
         if(target instanceof SwordEntity) {
             return false;
