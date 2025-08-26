@@ -26,6 +26,7 @@ public class SwordFollowTargetGoal extends Goal {
         if(sword.getFirstPassenger() instanceof EntityMaid maid) {
             Optional<LivingEntity> targetOptional = maid.getBrain().getMemory(MemoryModuleType.ATTACK_TARGET);
             LivingEntity followTarget = targetOptional.orElseGet(maid::getOwner);
+            boolean isOwner = targetOptional.isEmpty();
 
             if(followTarget != null) {
                 Vec3 swordPos = sword.position();
@@ -43,11 +44,16 @@ public class SwordFollowTargetGoal extends Goal {
                 Vec3 direction = targetPos.subtract(swordPos).add(0, 1, 0).normalize();
                 float yRot = (float) MathUtils.getYRotOfVector(direction);
 
+                double speedMultiplier = Math.min(1.0 + (distanceToTarget / 5.0), 3.0);
+                double speed = baseSpeed * speedMultiplier;
+                Vec3 motion = direction.scale(speed);
                 if(distanceToTarget >= 5) {
-                    double speedMultiplier = Math.min(1.0 + (distanceToTarget / 5.0), 3.0);
-                    double speed = baseSpeed * speedMultiplier;
-                    Vec3 motion = direction.scale(speed);
                     sword.setDeltaMovement(motion);
+                }
+
+                //拉开距离
+                if(!isOwner && distanceToTarget < 3) {
+                    sword.setDeltaMovement(-motion.x * 2, motion.y * 2, -motion.z * 2);
                 }
 
                 sword.setYRot(yRot);
