@@ -12,15 +12,28 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
 
 @EventBusSubscriber(modid = MaidSwordSoaringMod.MOD_ID, value = Dist.CLIENT)
 public class ForgeEvents {
 
     @SubscribeEvent
+    public static void onLivingHurt(LivingIncomingDamageEvent event) {
+        if(event.getEntity() instanceof EntityMaid maid) {
+            if(maid.getTask().getUid() == SwordSoaringTask.UID && maid.getTask().isEnable(maid) && !maid.level().isClientSide) {
+                if(event.getSource().is(DamageTypeTags.IS_FALL)) {
+                    event.setCanceled(true);
+                } else {
+                    event.setAmount(event.getAmount() * 0.5F);
+                }
+            }
+        }
+    }
+    @SubscribeEvent
     public static void onLivingHurt(LivingDamageEvent.Pre event) {
         //受伤发六脉神剑
         if(event.getEntity() instanceof EntityMaid maid) {
-            if(maid.getTask().getUid() == SwordSoaringTask.UID && !maid.level().isClientSide){
+            if(maid.getTask().getUid() == SwordSoaringTask.UID && maid.getTask().isEnable(maid) && !maid.level().isClientSide){
                 for (int i = 0; i < 6; i++) {
                     FlySwordEntity flySwordEntity = new FlySwordEntity(maid, null);
                     flySwordEntity.setPos(maid.getX(), maid.getY() + maid.getEyeHeight(), maid.getZ());
@@ -34,11 +47,6 @@ public class ForgeEvents {
                     flySwordEntity.setLifeTime(60);
                     flySwordEntity.setSpeed(speed);
                     maid.level().addFreshEntity(flySwordEntity);
-                }
-                if(event.getSource().is(DamageTypeTags.IS_FALL)) {
-                    event.setNewDamage(0);
-                } else {
-                    event.setNewDamage(event.getOriginalDamage() * 0.5F);
                 }
                 maid.level().playSound(null, maid.getX(), maid.getY(), maid.getZ(), SoundEvents.TOTEM_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
             }
