@@ -8,6 +8,7 @@ import com.p1nero.maid_sword_soaring.utils.MathUtils;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
@@ -46,6 +47,7 @@ public class ForgeEvents {
                     flySwordEntity.setDelay(0);
                     flySwordEntity.setLifeTime(60);
                     flySwordEntity.setSpeed(speed);
+                    flySwordEntity.setDamage((float) maid.getAttributeValue(Attributes.ATTACK_DAMAGE));
                     maid.level().addFreshEntity(flySwordEntity);
                 }
                 if(!event.getSource().is(DamageTypeTags.IS_FALL)){
