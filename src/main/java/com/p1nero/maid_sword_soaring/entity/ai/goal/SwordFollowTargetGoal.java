@@ -32,7 +32,7 @@ public class SwordFollowTargetGoal extends Goal {
                 Vec3 targetPos = followTarget.position();
 
                 double distanceToTarget = swordPos.distanceTo(targetPos);
-                double teleportThreshold = 50.0;
+                int teleportThreshold = 32;
                 double baseSpeed = 0.1;
 
                 if (distanceToTarget > teleportThreshold) {
@@ -40,19 +40,19 @@ public class SwordFollowTargetGoal extends Goal {
                     return;
                 }
 
-                Vec3 direction = targetPos.subtract(swordPos).add(0, 1.5, 0).normalize();
+                Vec3 direction = targetPos.subtract(swordPos).add(0, 2, 0).normalize();
                 float yRot = (float) MathUtils.getYRotOfVector(direction);
 
                 double speedMultiplier = Math.min(1.0 + (distanceToTarget / 5.0), 3.0);
                 double speed = baseSpeed * speedMultiplier;
                 Vec3 motion = direction.scale(speed);
 
-                if(distanceToTarget >= 5) {
+                if(distanceToTarget >= (isOwner ? 5 : 9)) {
                     sword.setDeltaMovement(motion);
                 }
                 //拉开距离
-                if(!isOwner && distanceToTarget < 3) {
-                    sword.setDeltaMovement(-motion.x, motion.y, -motion.z);
+                if(!isOwner && distanceToTarget < 5) {
+                    sword.setDeltaMovement(-motion.x * 3, motion.y, -motion.z * 3);
                 }
 
                 sword.setYRot(yRot);

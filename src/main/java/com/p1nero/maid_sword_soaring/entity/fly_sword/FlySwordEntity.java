@@ -24,7 +24,7 @@ public class FlySwordEntity extends SwordEntity {
     private int delay;
     private float speed = 0.3F;
     private int lifeTime = 100;
-    private float damageRate = 1.0F;
+    private float damage = 1.0F;
     private float fixedYRot = 0;
     private Vec3 fixedDir = Vec3.ZERO;
     @Override
@@ -78,8 +78,8 @@ public class FlySwordEntity extends SwordEntity {
         this.lifeTime = lifeTime;
     }
 
-    public void setDamageRate(float damageRate) {
-        this.damageRate = damageRate;
+    public void setDamage(float damage) {
+        this.damage = damage;
     }
 
     @Override
@@ -101,7 +101,7 @@ public class FlySwordEntity extends SwordEntity {
     @Override
     public void push(@NotNull Entity target) {
         super.push(target);
-        if(this.getOwner() == null || target == this.getOwner()) {
+        if(this.getOwner() == null || target == this.getOwner() || level().isClientSide) {
             return;
         }
         if(target instanceof LivingEntity livingEntity && !this.getOwner().canAttack(livingEntity)) {
@@ -110,7 +110,7 @@ public class FlySwordEntity extends SwordEntity {
         this.level().playSound(null, this.getX(), this.getY(), this.getZ(), MaidSwordSoaringSounds.HIT.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
         int prevInvulnerableTime = target.invulnerableTime;
         target.invulnerableTime = 0;
-        target.hurt(this.damageSources().mobAttack(this.getOwner()), (float) this.getOwner().getAttributeValue(Attributes.ATTACK_DAMAGE) * damageRate);
+        target.hurt(this.damageSources().mobAttack(this.getOwner()), damage);
         target.invulnerableTime = prevInvulnerableTime;
         this.discard();
     }

@@ -13,7 +13,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 public class MaidSwordSoaringEntities {
     public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(Registries.ENTITY_TYPE, MaidSwordSoaringMod.MOD_ID);
 
-    public static final DeferredHolder<EntityType<?>, EntityType<RideableSwordEntity>> RIDEABLE_SWORD = register("rideable_sword", EntityType.Builder.of(RideableSwordEntity::new, MobCategory.CREATURE), 0.5F, 0.2F);
+    public static final DeferredHolder<EntityType<?>, EntityType<RideableSwordEntity>> RIDEABLE_SWORD = register("rideable_sword", EntityType.Builder.of(RideableSwordEntity::new, MobCategory.CREATURE), 1, 2);
     public static final DeferredHolder<EntityType<?>, EntityType<FlySwordEntity>> FLY_SWORD = register("fly_sword", EntityType.Builder.of(FlySwordEntity::new, MobCategory.CREATURE), 0.1F, 0.1F);
 
     private static <T extends Entity> DeferredHolder<EntityType<?>, EntityType<T>> register(String registryName, EntityType.Builder<T> entityTypeBuilder) {
