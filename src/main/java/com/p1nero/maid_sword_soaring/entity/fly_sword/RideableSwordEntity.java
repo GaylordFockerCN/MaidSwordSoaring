@@ -27,6 +27,11 @@ public class RideableSwordEntity extends SwordEntity {
     }
 
     @Override
+    public double getPassengersRidingOffset() {
+        return 0.15;
+    }
+
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SwordFollowTargetGoal(this));
     }
