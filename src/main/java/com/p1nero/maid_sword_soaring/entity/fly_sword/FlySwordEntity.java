@@ -86,14 +86,16 @@ public class FlySwordEntity extends SwordEntity {
     @Override
     public void tick() {
         super.tick();
-        if(delay > 0) {
-            delay--;
-            if(delay == 0) {
-                this.level().playSound(null, this.getX(), this.getY(), this.getZ(), MaidSwordSoaringSounds.SHOOT.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+        if(!level().isClientSide) {
+            if(delay > 0) {
+                delay--;
+                if(delay == 0) {
+                    this.level().playSound(null, this.getX(), this.getY(), this.getZ(), MaidSwordSoaringSounds.SHOOT.get(), SoundSource.BLOCKS, 1.0F, 1.0F);
+                }
             }
-        }
-        if(tickCount > lifeTime || this.onGround()) {
-            this.discard();
+            if(tickCount > lifeTime || this.onGround()) {
+                this.discard();
+            }
         }
 
         syncDirection();
