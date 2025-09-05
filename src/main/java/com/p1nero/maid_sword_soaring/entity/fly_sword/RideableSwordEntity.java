@@ -9,6 +9,7 @@ import com.p1nero.maid_sword_soaring.entity.MaidSwordSoaringEntities;
 import com.p1nero.maid_sword_soaring.entity.ai.goal.SwordFollowTargetGoal;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -16,6 +17,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 
 public class RideableSwordEntity extends SwordEntity {
@@ -32,10 +34,19 @@ public class RideableSwordEntity extends SwordEntity {
 
     @Override
     protected InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
-        if(!this.getPassengers().isEmpty() && this.getPassengers().get(0) instanceof EntityMaid maid) {
+        if(!level().isClientSide && !this.getPassengers().isEmpty() && this.getPassengers().get(0) instanceof EntityMaid maid) {
             return maid.mobInteract(pPlayer, pHand);
         }
         return super.mobInteract(pPlayer, pHand);
+    }
+
+    @Override
+    public boolean hurt(@NotNull DamageSource pSource, float pAmount) {
+        boolean flag = false;
+        if(!this.getPassengers().isEmpty()) {
+            flag = this.getPassengers().get(0).hurt(pSource, pAmount);
+        }
+        return flag || super.hurt(pSource, pAmount);
     }
 
     @Override
