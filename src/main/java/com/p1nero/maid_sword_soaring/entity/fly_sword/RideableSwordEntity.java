@@ -7,12 +7,14 @@ import com.p1nero.maid_sword_soaring.entity.MaidSwordSoaringEntities;
 import com.p1nero.maid_sword_soaring.entity.ai.goal.SwordFollowTargetGoal;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 
 public class RideableSwordEntity extends SwordEntity {
@@ -29,10 +31,19 @@ public class RideableSwordEntity extends SwordEntity {
 
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
-        if(!this.getPassengers().isEmpty() && this.getPassengers().getFirst() instanceof EntityMaid maid){
+        if(!level().isClientSide && !this.getPassengers().isEmpty() && this.getPassengers().getFirst() instanceof EntityMaid maid){
             return maid.mobInteract(player, hand);
         }
         return super.mobInteract(player, hand);
+    }
+
+    @Override
+    public boolean hurt(@NotNull DamageSource pSource, float pAmount) {
+        boolean flag = false;
+        if(!this.getPassengers().isEmpty()) {
+            flag = this.getPassengers().getFirst().hurt(pSource, pAmount);
+        }
+        return flag || super.hurt(pSource, pAmount);
     }
 
     @Override
@@ -53,11 +64,10 @@ public class RideableSwordEntity extends SwordEntity {
     @Override
     public void tick() {
         super.tick();
-        if(this.tickCount > 60 && this.getPassengers().isEmpty()) {
+        if(!level().isClientSide && this.tickCount > 60 && this.getPassengers().isEmpty()) {
             this.discard();
         }
     }
-
 
     @OnlyIn(Dist.CLIENT)
     public void setRenderPose(PoseStack poseStack, float yRot, float partialTick) {

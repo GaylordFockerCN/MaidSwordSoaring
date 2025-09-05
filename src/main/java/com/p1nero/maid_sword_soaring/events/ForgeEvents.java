@@ -31,7 +31,7 @@ public class ForgeEvents {
         }
     }
     @SubscribeEvent
-    public static void onLivingHurt(LivingDamageEvent.Pre event) {
+    public static void onLivingHurt(LivingDamageEvent.Post event) {
         //受伤发六脉神剑
         if(event.getEntity() instanceof EntityMaid maid) {
             if(maid.getTask().getUid() == SwordSoaringTask.UID && MaidSwordSoaringMod.isValidSword(maid.getMainHandItem()) && !maid.level().isClientSide){
