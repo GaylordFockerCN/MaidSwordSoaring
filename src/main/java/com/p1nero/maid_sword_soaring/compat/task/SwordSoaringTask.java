@@ -49,7 +49,8 @@ public class SwordSoaringTask implements IAttackTask {
 
     @Override
     public @NotNull List<Pair<String, Predicate<EntityMaid>>> getConditionDescription(@NotNull EntityMaid maid) {
-        return List.of(Pair.of("is_valid", (maid1 -> MaidSwordSoaringMod.isValidSword(maid1.getMainHandItem()))));
+        return List.of(Pair.of("is_valid", (maid1 -> MaidSwordSoaringMod.isValidSword(maid1.getMainHandItem()))),
+                Pair.of("is_rideable", (EntityMaid::isRideable)));
     }
 
     @Override

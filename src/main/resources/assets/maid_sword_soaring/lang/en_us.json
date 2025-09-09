@@ -1,5 +1,6 @@
 {
   "task.maid_sword_soaring.sword_soaring.condition.is_valid": "Swordlike item in main hand",
+  "task.maid_sword_soaring.sword_soaring.condition.is_rideable": "Rideable",
   "task.maid_sword_soaring.sword_soaring": "Sword Soaring Task",
   "task.maid_sword_soaring.sword_soaring.desc": "Have the maid perform Sword Soaring, follow and protect the master."
 }
