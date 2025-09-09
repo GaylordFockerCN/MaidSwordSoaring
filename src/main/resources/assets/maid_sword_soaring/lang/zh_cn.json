@@ -1,5 +1,6 @@
 {
   "task.maid_sword_soaring.sword_soaring.condition.is_valid": "主手持剑",
+  "task.maid_sword_soaring.sword_soaring.condition.is_rideable": "允许骑乘",
   "task.maid_sword_soaring.sword_soaring": "御剑飞行",
   "task.maid_sword_soaring.sword_soaring.desc": "使女仆御剑飞行，追随主人，并保护主人"
 }

@@ -16,7 +16,7 @@ public class MaidSwordSoaringBehavior extends Behavior<EntityMaid> {
 
     @Override
     protected boolean checkExtraStartConditions(@NotNull ServerLevel pLevel, @NotNull EntityMaid maid) {
-        return MaidSwordSoaringMod.isValidSword(maid.getMainHandItem());
+        return MaidSwordSoaringMod.isValidSword(maid.getMainHandItem()) && maid.isRideable();
     }
 
     @Override
