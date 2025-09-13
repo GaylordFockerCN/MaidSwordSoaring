@@ -47,7 +47,7 @@ public class ForgeEvents {
                     flySwordEntity.setDelay(0);
                     flySwordEntity.setLifeTime(60);
                     flySwordEntity.setSpeed(speed);
-                    flySwordEntity.setDamage((float) maid.getAttributeValue(Attributes.ATTACK_DAMAGE));
+                    flySwordEntity.setDamage((float) maid.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
                     maid.level().addFreshEntity(flySwordEntity);
                 }
                 maid.level().playSound(null, maid.getX(), maid.getY(), maid.getZ(), SoundEvents.TOTEM_USE, SoundSource.BLOCKS, 1.0F, 1.0F);
