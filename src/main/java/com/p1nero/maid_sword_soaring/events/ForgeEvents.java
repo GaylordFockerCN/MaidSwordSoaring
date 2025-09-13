@@ -47,7 +47,7 @@ public class ForgeEvents {
                     flySwordEntity.setDelay(0);
                     flySwordEntity.setLifeTime(60);
                     flySwordEntity.setSpeed(speed);
-                    flySwordEntity.setDamage((float) maid.getAttributeValue(Attributes.ATTACK_DAMAGE));
+                    flySwordEntity.setDamage((float) maid.getAttribute(Attributes.ATTACK_DAMAGE).getValue());
                     maid.level().addFreshEntity(flySwordEntity);
                 }
                 if(!event.getSource().is(DamageTypeTags.IS_FALL)){
